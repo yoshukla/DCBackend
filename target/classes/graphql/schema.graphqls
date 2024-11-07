@@ -1,0 +1,77 @@
+type UserMaster {
+    id: ID!
+    companyId:String!    
+    emailId: String!
+    password: String!
+    abhaid: String!
+    firstName: String!
+    lastName: String!
+    gender: String!
+    mobileNo: String!
+    city: String!
+    address: String!
+    state: String!
+    licenseRegistrationNo: String!
+    qualification: String!
+    collageName: String!
+    courseYear: Int!
+    userTypeId: ID!
+}
+
+type UserType {
+  id: ID!
+  name: String!
+}
+
+type AuthResponse {
+    token: String!
+    user: UserMaster!
+}
+
+input LoginInput {
+    companyId:String!    
+    password: String!
+}
+
+# Queries
+type Query {
+    findAllUsers: [UserMaster!]!
+    findUserById(id: ID!): UserMaster
+    findAllUserTypes: [UserType!]!
+    findUserTypeById(id: ID!): UserType
+}
+
+# Mutations
+type Mutation {
+    login(input: LoginInput!): AuthResponse!
+    createUser(input: UserMasterInput!): UserMaster!
+    updateUser(id: ID!, input: UserMasterInput!): UserMaster!
+    deleteUser(id: ID!): Boolean!
+    createUserType(input: UserTypeInput!): UserType!
+    updateUserType(id: ID!, input: UserTypeInput!): UserType!
+    deleteUserType(id: ID!): Boolean!
+}
+
+# Input Types
+input UserMasterInput {    
+    companyId: String
+    emailId: String!
+    password: String!
+    abhaid: String!
+    firstName: String!
+    lastName: String!
+    gender: String!
+    mobileNo: String!
+    city: String!
+    address: String!
+    state: String!
+    licenseRegistrationNo: String!
+    qualification: String!
+    collageName: String!
+    courseYear: Int!
+    userTypeId: ID
+}
+
+input UserTypeInput {
+  name: String!
+}

@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://c9pv5s2sq0i76o.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/ddml4pvg8r4df6
+    username: ucjd333ep934j8
+    password: p8877fecb21fa488232512e3663d43b0004cf66ef76c65af0e5ac28719de28153
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update  # or validate, create, create-drop based on your needs
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      host: redis-10255.c322.us-east-1-2.ec2.redns.redis-cloud.com
+      port: 10255
+      username: default
+      password: k7Nz0S8c4mUT9LjTmUDq0EqyVrVKl70o 
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+
+jwt:
+  secret: empover
+  expiration: 86400000  # 24 hours
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
