@@ -18,9 +18,9 @@ import javax.crypto.SecretKey;
 
 @Service
 public class AuthService {
-
-    private final UserMasterRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+   
+      private final UserMasterRepository userRepository;
+      private final BCryptPasswordEncoder passwordEncoder;
 
     private static final long EXPIRATION_TIME = 3600000; // 1 hour
  // Generate a strong key for HS512
