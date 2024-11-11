@@ -3,7 +3,6 @@ package com.mladmin.portal.config;
 import com.mladmin.portal.security.JwtAuthFilter;
 import com.mladmin.portal.security.JwtService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,26 +16,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
-	private JwtService jwtService;
+    private final JwtService jwtService;
 
-	@Autowired
-	@Lazy
-	private UserDetailsService userDetailsService;
+    @Autowired
+    @Lazy
+    private UserDetailsService userDetailsService;
 
-	public SecurityConfig(JwtService jwtService) {
-		super();
-		this.jwtService = jwtService;
-	}
+    public SecurityConfig(JwtService jwtService) {
+        super();
+        this.jwtService = jwtService;
+    }
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(jwtService, userDetailsService); // inject JwtAuthFilter here
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(jwtService, userDetailsService); // Inject JwtAuthFilter
 
         return http
             .csrf(csrf -> csrf.disable())
@@ -50,6 +51,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .cors() // Enable CORS
+            .and()
             .build();
     }
 
@@ -61,5 +64,15 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // CORS configuration
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")  // Allow all origins
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("Authorization", "Content-Type")
+                .allowCredentials(true);  // Set to true only if credentials like cookies are needed
     }
 }
