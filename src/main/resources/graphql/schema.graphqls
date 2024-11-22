@@ -1,4 +1,16 @@
-type UserMaster {
+#Types
+type UserType {
+  id: ID!
+  name: String!
+}
+
+type AuthResponse {
+    token: String!
+    user: UserMaster!
+    message: String
+} 
+ 
+type UserMaster {  #doctor registrtaion
     id: ID!
     companyId:String!    
     emailId: String!
@@ -18,41 +30,52 @@ type UserMaster {
     userTypeId: ID!
 }
 
-type UserType {
-  id: ID!
-  name: String!
+type PatientRegistration {
+    id: Int!
+    name: String!
+    email: String!
+    mbno: String!
+    city: String
+    state: String
+    dob: String!
+    sex: String!
+    password: String!
 }
 
-type AuthResponse {
-    token: String!
-    user: UserMaster!
+type Appointment {
+  id: ID!
+  userId: Int!
+  hospital: String
+  patientName: String
+  doctorName: String
+  appointmentDate: String
+  chiefComplaint: String
+  bodyTemp: String
+  heartRate: String
+  respirationRate: String
+  bloodPressure: String
+  spO2: String
+  weight: String
+  height: String
+  doctorNotes: String
+  remarks: String 
+}
+ 
+# ============================
+# Input Types
+# ============================
+
+
+ 
+input UserTypeInput {
+  name: String!
 }
 
 input LoginInput {
     companyId:String!    
     password: String!
 }
-
-# Queries
-type Query {
-    findAllUsers: [UserMaster!]!
-    findUserById(id: ID!): UserMaster
-    findAllUserTypes: [UserType!]!
-    findUserTypeById(id: ID!): UserType
-}
-
-# Mutations
-type Mutation {
-    login(input: LoginInput!): AuthResponse!
-    createUser(input: UserMasterInput!): UserMaster!
-    updateUser(id: ID!, input: UserMasterInput!): UserMaster!
-    deleteUser(id: ID!): Boolean!
-    createUserType(input: UserTypeInput!): UserType!
-    updateUserType(id: ID!, input: UserTypeInput!): UserType!
-    deleteUserType(id: ID!): Boolean!
-}
-
-# Input Types
+ 
 input UserMasterInput {    
     companyId: String
     emailId: String!
@@ -72,6 +95,95 @@ input UserMasterInput {
     userTypeId: ID
 }
 
-input UserTypeInput {
-  name: String!
+input PatientRegistrationInput {
+    name: String!
+    email: String!
+    mbno: String!
+    city: String
+    state: String
+    dob: String!
+    sex: String!
+    password: String!
+    confirmPassword: String!
 }
+ 
+input AppointmentInput {
+  userId: Int!
+  hospital: String
+  patientName: String
+  doctorName: String
+  appointmentDate: String
+  chiefComplaint: String
+  bodyTemp: String
+  heartRate: String
+  respirationRate: String
+  bloodPressure: String
+  spO2: String
+  weight: String
+  height: String
+  doctorNotes: String
+  remarks: String 
+}
+
+
+# ============================
+# Queries
+# ============================
+
+type Query {
+
+    findAllUsers: [UserMaster!]!
+    findUserById(id: ID!): UserMaster
+    
+    #patients
+    getAllPatients: [PatientRegistration!]!
+    
+    findAllUserTypes: [UserType!]!
+    findUserTypeById(id: ID!): UserType 
+    
+    
+    #app
+     getAppointments: [Appointment]
+     getAppointment(id: ID!): Appointment
+     
+    
+}
+
+# ============================
+# Mutations
+# ============================
+
+
+type Mutation {
+
+
+    login(input: LoginInput!): AuthResponse!
+    
+     #usertype
+    
+    createUserType(input: UserTypeInput!): UserType!
+    updateUserType(id: ID!, input: UserTypeInput!): UserType!
+    deleteUserType(id: ID!): Boolean!
+    
+    #doctor
+    
+    createUser(input: UserMasterInput!): UserMaster!
+    updateUser(id: ID!, input: UserMasterInput!): UserMaster!
+    deleteUser(id: ID!): Boolean!
+    
+    
+    #patient register
+    
+    registerPatient(input: PatientRegistrationInput!): PatientRegistration
+    updatePatient(id: Int!, input: PatientRegistrationInput!): PatientRegistration
+    deletePatient(id: Int!): Boolean
+    
+     
+    #pp
+	  createAppointment(input: AppointmentInput): Appointment
+	  updateAppointment(id: ID!, input: AppointmentInput): Appointment
+	  deleteAppointment(id: ID!): Boolean
+     
+   
+}
+
